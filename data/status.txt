@@ -1,0 +1,68 @@
+AutoBarreV0.01.py
+=================
+
+This runs as a script.
+
+From the command prompt navigate to its folder, then run "python AutoBarreV0.01.py".
+
+It reads a file "input.jpg", then automatically rotates it, crops it, then detects barre, and displays the result. It automatically crops the image to the largest size that it can guarantee the rotation will work. When using this script any barre should be in the center 35% of the image.
+
+Then it applies a gaussian blur with a 5x5 kernel, and detects barre and displays the result again. It repeats this 20 times. All 21 detected images are saved as output0.jpg through output20.jpg.
+
+Gaussian blur was used because it stacks. I.e. applying a 5x5 gaussian blur twice is the same as a 10x10 once. A rectangular blur with an integer multiple of the number of pixels per course for its kernel size might give better results, but this wasn't investigated.
+
+After each detection step, the compactness of the clusters found by the kmeans algorithm is displayed on the command line. It outputs this compactness vs. blur data to a file called "output.csv".
+
+At this point all of the filenames, both input and output, are hardcoded, unfortunately.
+
+
+
+AutoBarreV0.02.py
+================
+
+This one is as the above except it has the AATCC Uniformity filenames hardcoded as input, and it runs on ALL of them and saves all of the data to one giant .csv file. Also, the rotation isn't needed.
+
+It takes as input the nine AATCC files, as output you get a file "output.csv".
+
+AutoBarreV0.02_no_kmeans.py
+===========================
+This version doesn't detect the barre. I used it to extract information from the AATCC files so that I could perform fourier analysis in MATLAB.
+
+It takes as input the nine AATCC files (hardcoded), and it writes a file "outputmeans.csv".
+
+
+ProcessBarreV1.02.py
+====================
+
+This is the original program, just with a few bug fixes.
+
+ProcessBarreV1.02-no_kmeans.py
+==============================
+
+This is the original program, except that the "detect" subroutine is modified to output the mean pixel values instead of outputting which cluster each mean pixel value belongs to. I wanted to use it to try and determine if some form of prefiltering would benefit the kmeans algorithm but I didn't get anywhere.
+
+ProcessBarreV1.01.py
+====================
+
+This is the original program, with a few bug fixes.
+
+ProcessBarreV1.py
+=================
+
+This is the original program.
+
+kmeanstest.m
+=============
+
+This MATLAB script takes some of the data from ProcessBarreV1.02-no_kmeans.py and tries to run MATLAB's version of kmeans on it.
+
+
+plotspectrums.m
+===============
+
+This MATLAB script takes the data from AutoBarreV1.02_no_kmeans.py and plots the frequency spectrum of what the standard considers a "1" and a "9" as subplots. It assumes that you have already imported the .csv file into a variable called "outputmeans".
+
+filterbands.m
+===============
+
+This MATLAB script takes the data from AutoBarreV1.02_no_kmeans.py and attempts to split the data's energy into frequency bands and plot it. It assumes that you have already imported the .csv file into a variable called "outputmeans".
